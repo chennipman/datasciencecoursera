@@ -4,8 +4,7 @@ best <- function(state, outcome) {
   ## Return hospital name in that state with lowest 30-day death
   ## rate
 
-  
-  ## Read outcome data
+  ## Read data from input file
   data <- read.csv("data/outcome-of-care-measures.csv", colClasses = "character")
 
   # list all states
@@ -23,22 +22,27 @@ best <- function(state, outcome) {
     print(outcome)
     stop("invalid outcome")
   }
-    
+  
+  # Select the relevant column
   if (outcome == "heart attack"){
-    print("heart attack")
     column_name <- "Hospital.30.Day.Death..Mortality..Rates.from.Heart.Attack"
     } 
 
   if (outcome == "heart failure"){
-    print("heart failure")
     column_name <- "Hospital.30.Day.Death..Mortality..Rates.from.Heart.Failure"
   } 
   
   if (outcome == "pneumonia"){
-    print("pneumonia")
     column_name <- "Hospital.30.Day.Death..Mortality..Rates.from.Pneumonia"
   } 
   
+  # Pick the best hospital
+  lowest_mortality_rate <- min(data[,column_name])
+  low_mortality_hospitals <- data[data[,column_name]==lowest_mortality_rate,"Hospital.Name"]
+  # sort the hosipitals on alphabetical order
+  low_mortality_hospitals <- sort(low_mortality_hospitals)
+  # select the first of the alphabetical sorted list
+  return(low_mortality_hospitals[1])
   
   
 }
